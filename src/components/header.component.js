@@ -11,7 +11,7 @@ export class HeaderComponent extends Component {
             this.hide()
         }
        const btn = this.$el.querySelector('.js-header-start')
-       console.log('btn: ', btn);
+    //    console.log('btn: ', btn);
        btn.addEventListener('click', buttonHandler.bind(this))
     }
 }
@@ -19,6 +19,6 @@ export class HeaderComponent extends Component {
 function buttonHandler() {
     // console.log('this.$el.buttonHandler: ', this.$el);
     // this.$el.classList.add('hide')
-    localStorage.setItem('visited ', JSON.stringify(true))
+    localStorage.setItem('visited', JSON.stringify(true))
     this.hide()
 }
