@@ -8,6 +8,10 @@ export class PostsComponent extends Component {
         this.loader = loader
     }
 
+    init() {
+        this.$el.addEventListener('click', buttonHandler.bind(this))
+    }
+
     async onShow() {
         this.loader.show()
         // console.log('Posts onShow!!!');
@@ -30,7 +34,9 @@ function renderPost(post) {
         ? '<li class="tag tag-blue tag-rounded">Новость</li>'
         : '<li class="tag tag-rounded">Заметка</li>'
 
-    const button = `<button class="button-round button-small button-primary">Сохранить</button>`
+    const button = (JSON.parse(localStorage.getItem('favorites')) || []).includes(post.id)
+        ? `<button class="button-round button-small button-danger" data-id="${post.id}">Удалить</button>`
+        : `<button class="button-round button-small button-primary" data-id="${post.id}">Сохранить</button>`
 
     return `
         <div class="panel">
@@ -49,4 +55,33 @@ function renderPost(post) {
             </div>
         </div>
     `
+}
+
+function buttonHandler(event) {
+    // console.log('event btnHandler: ', event);
+    const $el = event.target
+    const id = $el.dataset.id
+
+    if (id) {
+        // console.log('id: ', id);
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+        // console.log('favorites :', favorites);
+
+        if (favorites.includes(id)) {
+            // удалить элемент
+            $el.textContent = 'Сохранить'
+            $el.classList.add('button-primary')
+            $el.classList.remove('button-danger')
+            favorites = favorites.filter(fId => fId !== id)
+        } else {
+            // добавить эл-т
+            $el.textContent = 'Удалить'
+            $el.classList.add('button-danger')
+            $el.classList.remove('button-primary')
+            favorites.push(id)
+        }
+
+        localStorage.setItem('favorites', JSON.stringify(favorites))
+    }
+
 }
