@@ -33,23 +33,25 @@ function buttonHandler(event) {
     // console.log('event btnHandler: ', event);
     const $el = event.target
     const id = $el.dataset.id
+    const title = $el.dataset.title
 
     if (id) {
         // console.log('id: ', id);
         let favorites = JSON.parse(localStorage.getItem('favorites')) || []
+        const candidate = favorites.find(p => p.id === id)
         // console.log('favorites :', favorites);
-        if (favorites.includes(id)) {
+        if (candidate) {
             // удалить элемент
             $el.textContent = 'Сохранить'
             $el.classList.add('button-primary')
             $el.classList.remove('button-danger')
-            favorites = favorites.filter(fId => fId !== id)
+            favorites = favorites.filter(p => p.id !== id)
         } else {
             // добавить эл-т
             $el.textContent = 'Удалить'
             $el.classList.add('button-danger')
             $el.classList.remove('button-primary')
-            favorites.push(id)
+            favorites.push({id, title})
         }
         localStorage.setItem('favorites', JSON.stringify(favorites))
     }
